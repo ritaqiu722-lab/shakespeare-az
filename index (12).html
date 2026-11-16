@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>莎士比亞單字 A–Z</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inter:wght@400;600&display=swap">
+<style>
+  /* Layout: one stage card (picture, blank letter slots, pronounce, quote, spell) under an A–Z strip. */
+  :root{
+    --display:'IM Fell English',Georgia,'Noto Serif TC','PingFang TC','Songti TC',serif;
+    --body:'Inter','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
+    --bg:#EDF0F4; --panel:#F8F9FB; --paper:#E3E8EF; --ink:#16202D; --muted:#566275; --line:#C6CEDA;
+    --accent:#9E1F33; --on-accent:#FFFFFF; --gold:#C79A2B; --leaf:#4C7A5A; --hl:#F1D78C;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1520; --panel:#172131; --paper:#223048; --ink:#E7ECF3; --muted:#9AA7BA; --line:#2B3850;
+      --accent:#E0566A; --on-accent:#14070B; --gold:#E3B341; --leaf:#6FB088; --hl:#6A5218;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1520; --panel:#172131; --paper:#223048; --ink:#E7ECF3; --muted:#9AA7BA; --line:#2B3850;
+    --accent:#E0566A; --on-accent:#14070B; --gold:#E3B341; --leaf:#6FB088; --hl:#6A5218;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.6;
+    padding-block:24px 40px;
+    padding-left:max(16px, env(safe-area-inset-left, 0px));
+    padding-right:max(16px, env(safe-area-inset-right, 0px));
+  }
+  main{max-width:600px; margin:0 auto; display:flex; flex-direction:column; gap:20px}
+  h1{font-family:var(--display); font-weight:400; font-size:clamp(1.9rem,6vw,2.5rem); line-height:1.15; margin:0; text-wrap:balance}
+  .lede{margin:4px 0 0; color:var(--muted); font-size:.95rem}
+
+  #abc{display:grid; grid-template-columns:repeat(auto-fill,minmax(40px,1fr)); gap:6px}
+  #abc button{
+    position:relative; min-height:40px; border:1px solid var(--line); background:var(--panel); color:var(--ink);
+    border-radius:8px; font-family:var(--display); font-size:1.15rem; cursor:pointer; padding:0;
+  }
+  #abc button[aria-current="true"]{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+  #abc button.done::after{content:""; position:absolute; bottom:4px; left:50%; width:5px; height:5px; margin-left:-2.5px; border-radius:50%; background:var(--gold)}
+
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:20px; display:flex; flex-direction:column; align-items:center; gap:18px;
+  }
+  .art{position:relative; width:100%; max-width:280px; aspect-ratio:1/1}
+  .art .letter{position:absolute; top:-6px; left:-4px; font-family:var(--display); font-size:3.4rem; line-height:1; color:var(--accent); opacity:.9}
+  .art svg{width:100%; height:100%; display:block}
+  .art svg .s{fill:none; stroke:var(--ink); stroke-width:3; stroke-linecap:round; stroke-linejoin:round}
+  .art svg .fp{fill:var(--paper)}
+  .art svg .fa{fill:var(--accent)}
+  .art svg .fg{fill:var(--gold)}
+  .art svg .fl{fill:var(--leaf)}
+  .art svg .fi{fill:var(--ink); stroke:none}
+  .art svg .n{stroke:none}
+  .art svg .tx{fill:var(--ink); stroke:none; font-family:var(--display)}
+  .art svg .txa{fill:var(--on-accent); stroke:none; font-family:var(--display)}
+
+  .slots{display:flex; justify-content:center; gap:6px; width:100%; min-height:48px}
+  .slot{
+    flex:1 1 0; min-width:0; max-width:34px; height:46px; border-bottom:3px solid var(--ink);
+    display:flex; align-items:flex-end; justify-content:center; padding-bottom:2px;
+    font-family:var(--display); font-size:clamp(1.1rem,5.4vw,2rem); line-height:1.1; color:var(--ink);
+  }
+  .slot.on{border-bottom-color:var(--accent); color:var(--accent)}
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    min-height:48px; padding:0 24px; width:100%; max-width:320px;
+    border:1.5px solid var(--ink); background:transparent; color:var(--ink);
+    border-radius:10px; font:600 1rem var(--body); cursor:pointer;
+  }
+  .btn.primary{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+  .btn:disabled{opacity:.45; cursor:not-allowed}
+  .btn svg{width:20px; height:20px; flex:none; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+  button:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+
+  .quote{
+    margin:0; width:100%; min-height:9.5rem; padding:6px 4px; text-align:center;
+    display:flex; flex-direction:column; justify-content:center; gap:10px;
+  }
+  .quote .en{font-family:var(--display); font-style:italic; font-size:clamp(1.25rem,4.6vw,1.6rem); line-height:1.45; text-wrap:balance}
+  .quote mark{background:var(--hl); color:var(--ink); padding:0 .12em; border-radius:3px}
+  .quote .zh{color:var(--ink); font-size:1rem}
+  .quote .src{color:var(--muted); font-size:.85rem}
+  .quote.empty{color:var(--muted); font-size:.95rem}
+  .quote.show{animation:rise .35s ease-out}
+  @keyframes rise{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  @media (prefers-reduced-motion: reduce){.quote.show{animation:none}}
+
+  .hint{margin:0; color:var(--muted); font-size:.88rem; text-align:center; min-height:1.4em}
+
+  .pager{display:flex; justify-content:space-between; gap:12px}
+  .pager .btn{max-width:none; width:auto; flex:1 1 0}
+  .foot{margin:0; color:var(--muted); font-size:.8rem; text-align:center}
+</style>
+
+</head>
+<body>
+<main>
+  <header>
+    <h1>莎士比亞單字 A–Z</h1>
+    <p class="lede">看圖、聽發音、讀金句,最後自己拼出來。</p>
+  </header>
+
+  <nav id="abc" aria-label="選擇字母"></nav>
+
+  <section class="card" aria-live="polite">
+    <div class="art"><span class="letter" id="letter">A</span><div id="art"></div></div>
+    <div class="slots" id="slots"></div>
+
+    <button class="btn primary" id="say" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+      念出單字
+    </button>
+
+    <blockquote class="quote empty" id="quote">按下「念出單字」,這個字的金句會出現在這裡。</blockquote>
+
+    <button class="btn" id="spell" type="button" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18 12 5l7 13M8 13h8"/></svg>
+      拼出單字
+    </button>
+    <p class="hint" id="hint"></p>
+  </section>
+
+  <div class="pager">
+    <button class="btn" id="prev" type="button">上一個</button>
+    <button class="btn" id="next" type="button">下一個</button>
+  </div>
+  <p class="foot">引文憑記憶整理,正式引用前請對照原文。</p>
+</main>
+
+<script>
+const WORDS = [
+  {l:'A', w:'Alas', say:'alas',
+   q:"Alas, poor Yorick! I knew him, Horatio.", zh:'唉,可憐的郁利克!我認識他,霍拉旭。', src:'《哈姆雷特》5.1',
+   art:`<ellipse cx="100" cy="176" rx="46" ry="7" class="fp n"/>
+<path d="M60 100C60 60 80 40 100 40C120 40 140 60 140 100C140 115 132 122 128 128V152H72V128C68 122 60 115 60 100Z" class="s fp"/>
+<circle cx="82" cy="100" r="11" class="fi"/><circle cx="118" cy="100" r="11" class="fi"/>
+<path d="M100 114L93 130H107Z" class="fi"/>
+<path d="M84 152V140M96 152V140M108 152V140M120 152V140" class="s"/>`},
+  {l:'B', w:'Bodkin', say:'bod kin',
+   q:"When he himself might his quietus make\nWith a bare bodkin?", zh:'只要用一把小小的匕首,就能了結自己。', src:'《哈姆雷特》3.1',
+   art:`<g transform="rotate(45 100 100)">
+<path d="M100 14L109 112H91Z" class="s fp"/>
+<rect x="74" y="112" width="52" height="10" rx="5" class="s fg"/>
+<rect x="94" y="122" width="12" height="36" rx="4" class="s fa"/>
+<circle cx="100" cy="166" r="9" class="s fg"/></g>`},
+  {l:'C', w:'Cudgel', say:'cudgel',
+   q:"Cudgel thy brains no more about it.", zh:'別再為這事絞盡腦汁了。', src:'《哈姆雷特》5.1',
+   art:`<g transform="rotate(-35 100 100)">
+<path d="M78 34C78 22 122 22 122 34L117 128C116 142 112 166 108 174H92C88 166 84 142 83 128Z" class="s fg"/>
+<circle cx="100" cy="66" r="6" class="s"/>
+<path d="M92 92V124M108 84V116" class="s"/></g>`},
+  {l:'D', w:'Dost', say:'duhst',
+   q:"Dost thou think Alexander looked o' this fashion i' th' earth?", zh:'你想亞歷山大埋在地下也是這副模樣嗎?', src:'《哈姆雷特》5.1',
+   art:`<path d="M52 122C52 68 78 44 100 44C122 44 148 68 148 122V144H124V110H76V144H52Z" class="s fg"/>
+<path d="M100 110V144" class="s"/>
+<path d="M100 44C96 22 124 14 152 24C140 30 128 38 120 50" class="s fa"/>`},
+  {l:'E', w:'Ere', say:'air',
+   q:"Ere yet the salt of most unrighteous tears\nHad left the flushing in her galled eyes", zh:'她那虛偽眼淚的鹽分,還沒從紅腫的眼眶褪去……', src:'《哈姆雷特》1.2',
+   art:`<path d="M62 30H138M62 172H138" class="s" stroke-width="6"/>
+<path d="M70 34C70 80 100 90 100 100C100 110 70 120 70 168H130C130 120 100 110 100 100C100 90 130 80 130 34Z" class="s fp"/>
+<path d="M78 40H122C118 64 106 76 100 84C94 76 82 64 78 40Z" class="fg n"/>
+<path d="M76 166C80 148 92 134 100 134C108 134 120 148 124 166Z" class="fg n"/>
+<path d="M100 88V134" class="s" stroke-width="2"/>`},
+  {l:'F', w:'Fie', say:'fy',
+   q:"Fie, my lord, fie! a soldier, and afeard?", zh:'呸,我的主,呸!堂堂軍人,竟然害怕?', src:'《馬克白》5.1',
+   art:`<path d="M100 36C118 62 122 76 100 92C78 76 82 62 100 36Z" class="s fa"/>
+<path d="M100 92V86" class="s"/>
+<rect x="82" y="92" width="36" height="68" rx="4" class="s fp"/>
+<path d="M82 112C90 112 90 126 90 126" class="s"/>
+<path d="M62 172H138L128 160H72Z" class="s fg"/>`},
+  {l:'G', w:'Gild', say:'gild',
+   q:"To gild refined gold, to paint the lily", zh:'給純金鍍金、為百合上色(多此一舉)。', src:'《約翰王》4.2',
+   art:`<path d="M100 182C100 152 100 130 100 100" class="s"/>
+<path d="M100 162C80 152 70 142 66 126C84 128 96 142 100 162Z" class="s fl"/>
+<path d="M100 100C86 72 90 46 100 28C110 46 114 72 100 100Z" class="s fg"/>
+<path d="M100 100C80 92 62 78 56 54C78 60 94 78 100 100Z" class="s fp"/>
+<path d="M100 100C120 92 138 78 144 54C122 60 106 78 100 100Z" class="s fp"/>
+<path d="M150 142L176 114" class="s" stroke-width="6"/>
+<path d="M148 142L138 158L154 152Z" class="s fg"/>`},
+  {l:'H', w:'Hark', say:'hark',
+   q:"Hark, hark! the lark at heaven's gate sings", zh:'聽啊,聽!雲雀在天門前歌唱。', src:'《辛白林》2.3',
+   art:`<path d="M52 112C60 86 92 78 116 92C136 82 154 90 158 102C150 102 146 108 142 116C132 142 100 152 78 142C66 138 54 128 52 112Z" class="s fp"/>
+<path d="M52 112L28 102L34 124Z" class="s fp"/>
+<path d="M80 114C96 102 116 110 122 126C104 132 88 128 80 114Z" class="s fa"/>
+<path d="M158 102L176 106L158 112Z" class="s fg"/>
+<circle cx="138" cy="98" r="3.5" class="fi"/>
+<path d="M62 58V36L84 32V54" class="s"/>
+<circle cx="56" cy="60" r="6" class="fi"/><circle cx="78" cy="56" r="6" class="fi"/>`},
+  {l:'I', w:'Ides', say:'eyedz',
+   q:"Beware the Ides of March.", zh:'當心三月十五日。', src:'《凱撒大帝》1.2',
+   art:`<rect x="40" y="40" width="120" height="132" rx="10" class="s fp"/>
+<path d="M40 72V50A10 10 0 0 1 50 40H150A10 10 0 0 1 160 50V72Z" class="s fa"/>
+<path d="M72 30V48M128 30V48" class="s" stroke-width="5"/>
+<text x="100" y="63" text-anchor="middle" font-size="18" class="txa">MARCH</text>
+<text x="100" y="140" text-anchor="middle" font-size="64" class="tx">15</text>`},
+  {l:'J', w:'Jocund', say:'jock und',
+   q:"…and jocund day\nStands tiptoe on the misty mountain tops.", zh:'愉悅的白晝踮著腳,站上迷霧的山頭。', src:'《羅密歐與茱麗葉》3.5',
+   art:`<circle cx="100" cy="100" r="34" class="s fg"/>
+<path d="M100 48V30M62 62L50 50M138 62L150 50M46 100H28M154 100H172" class="s"/>
+<path d="M10 172L58 112L84 142L116 98L150 142L172 122L192 172Z" class="s fp"/>`},
+  {l:'K', w:'Knave', say:'nayv',
+   q:"A knave; a rascal; an eater of broken meats…", zh:'一個無賴、惡棍,專吃殘羹剩飯的傢伙……', src:'《李爾王》2.2',
+   art:`<rect x="52" y="24" width="96" height="152" rx="10" class="s fp"/>
+<path d="M76 92L100 54L124 92Z" class="s fa"/>
+<circle cx="100" cy="106" r="22" class="s fp"/>
+<circle cx="92" cy="102" r="2.8" class="fi"/><circle cx="108" cy="102" r="2.8" class="fi"/>
+<path d="M90 114Q100 124 110 114" class="s"/>
+<path d="M80 134Q100 150 120 134" class="s"/>
+<text x="66" y="52" font-size="20" class="tx">K</text>
+<text x="134" y="164" text-anchor="end" font-size="20" class="tx">K</text>`},
+  {l:'L', w:'Love', say:'love',
+   q:"The course of true love never did run smooth.", zh:'真愛的道路從來不平坦。', src:'《仲夏夜之夢》1.1',
+   art:`<path d="M100 164C40 120 38 68 72 60C88 56 98 66 100 76C102 66 112 56 128 60C162 68 160 120 100 164Z" class="s fa"/>
+<path d="M16 184C50 168 70 190 100 176S150 168 184 184" class="s" stroke-dasharray="2 9"/>`},
+  {l:'M', w:'Methinks', say:'me thinks',
+   q:"The lady doth protest too much, methinks.", zh:'依我看,那位夫人誓言太多了。', src:'《哈姆雷特》3.2',
+   art:`<circle cx="60" cy="140" r="22" class="s fp"/>
+<path d="M24 192C24 170 40 164 60 164C80 164 96 170 96 192" class="s fp"/>
+<circle cx="84" cy="116" r="5" class="s fp"/><circle cx="98" cy="98" r="8" class="s fp"/>
+<path d="M104 70C96 52 116 38 132 46C140 32 168 34 170 54C186 58 186 84 168 88C162 100 138 102 130 92C116 98 102 90 104 70Z" class="s fp"/>
+<circle cx="124" cy="68" r="4" class="fi"/><circle cx="138" cy="68" r="4" class="fi"/><circle cx="152" cy="68" r="4" class="fi"/>`},
+  {l:'N', w:'Nay', say:'nay',
+   q:"Seems, madam? Nay, it is; I know not “seems.”", zh:'「似乎」?母親,事實就是如此,我不懂什麼「似乎」。', src:'《哈姆雷特》1.2',
+   art:`<circle cx="100" cy="100" r="46" class="s fp"/>
+<path d="M80 92H92M108 92H120M86 122H114" class="s"/>
+<path d="M30 100H54M42 88L30 100L42 112" class="s"/>
+<path d="M170 100H146M158 88L170 100L158 112" class="s"/>`},
+  {l:'O', w:'Oft', say:'oft',
+   q:"Oft expectation fails, and most oft there\nWhere most it promises.", zh:'期望常常落空,而最常落空的,偏偏是最被看好之處。', src:'《終成眷屬》2.1',
+   art:`<path d="M56 100A44 44 0 0 1 132 70" class="s" stroke-width="5"/>
+<path d="M118 60L134 68L124 82" class="s" stroke-width="5"/>
+<path d="M144 100A44 44 0 0 1 68 130" class="s" stroke-width="5"/>
+<path d="M82 140L66 132L76 118" class="s" stroke-width="5"/>
+<circle cx="100" cy="100" r="11" class="s fa"/>`},
+  {l:'P', w:'Perchance', say:'per chance',
+   q:"To sleep, perchance to dream.", zh:'死去,睡去;睡去,也許還會做夢。', src:'《哈姆雷特》3.1',
+   art:`<defs><mask id="moonmask"><rect width="200" height="200" fill="#fff"/><circle cx="130" cy="84" r="52" fill="#000"/></mask></defs>
+<circle cx="92" cy="108" r="62" mask="url(#moonmask)" class="fg"/>
+<path d="M150 36l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" class="fg"/>
+<path d="M172 82l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" class="fg"/>
+<text x="132" y="160" font-size="30" font-style="italic" class="tx">z z</text>`},
+  {l:'Q', w:'Quintessence', say:'quin tessence',
+   q:"…and yet to me, what is this quintessence of dust?", zh:'可是對我而言,這塵土的精華又算什麼?', src:'《哈姆雷特》2.2',
+   art:`<circle cx="100" cy="100" r="72" class="s fp"/>
+<path d="M100 44L133 145L47 83L153 83L67 145Z" class="s fg"/>
+<circle cx="30" cy="40" r="3" class="fi"/><circle cx="174" cy="52" r="3" class="fi"/><circle cx="170" cy="164" r="3" class="fi"/><circle cx="26" cy="150" r="3" class="fi"/>`},
+  {l:'R', w:'Rogue', say:'rogue',
+   q:"O, what a rogue and peasant slave am I!", zh:'唉,我真是個無賴又卑賤的奴才!', src:'《哈姆雷特》2.2',
+   art:`<path d="M30 90L12 84M170 90L188 84" class="s"/>
+<path d="M30 90C30 70 60 64 100 82C140 64 170 70 170 90C170 120 150 132 130 124C116 118 112 108 100 108C88 108 84 118 70 124C50 132 30 120 30 90Z" class="s fa"/>
+<ellipse cx="66" cy="98" rx="17" ry="9" class="s fp"/><ellipse cx="134" cy="98" rx="17" ry="9" class="s fp"/>`},
+  {l:'S', w:'Sweet', say:'sweet',
+   q:"Parting is such sweet sorrow.", zh:'離別是如此甜蜜的悲傷。', src:'《羅密歐與茱麗葉》2.2',
+   art:`<path d="M60 172V82C60 40 140 40 140 82V172Z" class="s fp"/>
+<rect x="44" y="132" width="112" height="14" rx="3" class="s fg"/>
+<path d="M56 146V172M72 146V172M88 146V172M104 146V172M120 146V172M136 146V172M152 146V172" class="s"/>
+<circle cx="100" cy="98" r="15" class="s fa"/>
+<path d="M94 98A6 6 0 1 1 100 104" class="s"/>`},
+  {l:'T', w:'Thine', say:'thine',
+   q:"To thine own self be true.", zh:'對你自己要忠實。', src:'《哈姆雷特》1.3',
+   art:`<circle cx="100" cy="82" r="52" class="s fg"/>
+<circle cx="100" cy="82" r="41" class="s fp"/>
+<rect x="91" y="134" width="18" height="50" rx="9" class="s fg"/>
+<path d="M72 68A34 34 0 0 1 92 50" class="s"/>
+<path d="M118 100l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" class="fg"/>`},
+  {l:'U', w:'Uneasy', say:'un easy',
+   q:"Uneasy lies the head that wears a crown.", zh:'戴王冠的頭不得安寢。', src:'《亨利四世》下篇 3.1',
+   art:`<g transform="rotate(-12 100 110)">
+<path d="M44 140L40 76L72 104L100 64L128 104L160 76L156 140Z" class="s fg"/>
+<rect x="44" y="140" width="112" height="18" rx="3" class="s fa"/>
+<circle cx="100" cy="149" r="4" class="fp n"/></g>
+<path d="M170 44C162 58 162 68 170 68C178 68 178 58 170 44Z" class="s fp"/>
+<path d="M30 70C22 84 22 94 30 94C38 94 38 84 30 70Z" class="s fp"/>`},
+  {l:'V', w:'Valiant', say:'valiant',
+   q:"Cowards die many times before their deaths;\nThe valiant never taste of death but once.", zh:'懦夫在死前已死多次,勇者一生只嘗一次死亡。', src:'《凱撒大帝》2.2',
+   art:`<path d="M54 40H146V100C146 138 122 158 100 170C78 158 54 138 54 100Z" class="s fa"/>
+<path d="M54 84H146" class="s"/>
+<path d="M94 18L100 6L106 18V122H94Z" class="s fp"/>
+<rect x="74" y="122" width="52" height="10" rx="5" class="s fg"/>
+<rect x="95" y="132" width="10" height="30" rx="3" class="s fa"/>
+<circle cx="100" cy="170" r="7" class="s fg"/>`},
+  {l:'W', w:'Wherefore', say:'wherefore',
+   q:"O Romeo, Romeo! wherefore art thou Romeo?", zh:'羅密歐啊羅密歐!你為什麼偏偏是羅密歐?', src:'《羅密歐與茱麗葉》2.2',
+   art:`<path d="M92 182C94 156 90 140 96 114" class="s"/>
+<path d="M94 152C74 150 62 140 60 128C80 128 92 138 94 152Z" class="s fl"/>
+<path d="M95 168C115 166 127 156 129 144C109 144 97 154 95 168Z" class="s fl"/>
+<circle cx="92" cy="82" r="34" class="s fa"/>
+<path d="M92 82A14 14 0 1 1 106 96" class="s"/>
+<path d="M74 68C82 58 104 58 110 70" class="s"/>
+<text x="158" y="76" text-anchor="middle" font-size="64" class="tx">?</text>`},
+  {l:'X', w:'Xanthippe', say:'zan tip ee',
+   q:"As old as Sibyl, and as curst and shrewd\nAs Socrates' Xanthippe", zh:'即使她像蘇格拉底的妻子贊西佩一樣年老、暴躁又潑辣……', src:'《馴悍記》1.2',
+   art:`<rect x="26" y="40" width="68" height="12" rx="2" class="s fp"/>
+<rect x="34" y="52" width="52" height="98" class="s fp"/>
+<path d="M45 56V146M60 56V146M75 56V146" class="s" stroke-width="2"/>
+<rect x="26" y="150" width="68" height="14" rx="2" class="s fp"/>
+<path d="M112 52H176Q184 52 184 60V98Q184 106 176 106H142L126 122V106H112Q104 106 104 98V60Q104 52 112 52Z" class="s fp"/>
+<text x="144" y="92" text-anchor="middle" font-size="44" class="tx" style="fill:var(--accent)">!!</text>`},
+  {l:'Y', w:'Yond', say:'yond',
+   q:"Yond Cassius has a lean and hungry look.", zh:'那邊的卡修斯,看起來又瘦又飢餓。', src:'《凱撒大帝》1.2',
+   art:`<path d="M10 100C26 82 56 82 72 100C56 118 26 118 10 100Z" class="s fp"/>
+<circle cx="41" cy="100" r="8" class="fi"/>
+<path d="M84 100H128M122 92L130 100L122 108" class="s" stroke-dasharray="1 8"/>
+<rect x="144" y="96" width="30" height="66" class="s fp"/>
+<rect x="144" y="84" width="8" height="12" class="s fp"/><rect x="155" y="84" width="8" height="12" class="s fp"/><rect x="166" y="84" width="8" height="12" class="s fp"/>
+<path d="M159 114V128" class="s"/>
+<path d="M10 162H192" class="s"/>`},
+  {l:'Z', w:'Zed', say:'zed',
+   q:"Thou whoreson zed! thou unnecessary letter!", zh:'你這混帳 Z!你這多餘的字母!', src:'《李爾王》2.2',
+   art:`<circle cx="100" cy="100" r="78" class="s fp"/>
+<path d="M66 68H134L66 134H134" style="fill:none;stroke:var(--accent);stroke-width:14;stroke-linecap:round;stroke-linejoin:round"/>
+<path d="M30 40l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" class="fg"/>
+<path d="M172 156l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" class="fg"/>`}
+];
+
+const LETTER_NAME = {a:'ay',b:'bee',c:'see',d:'dee',e:'ee',f:'eff',g:'jee',h:'aitch',i:'eye',j:'jay',k:'kay',l:'el',m:'em',n:'en',o:'oh',p:'pee',q:'cue',r:'ar',s:'ess',t:'tee',u:'you',v:'vee',w:'double you',x:'ex',y:'why',z:'zed'};
+
+const $ = id => document.getElementById(id);
+const abc = $('abc'), letterEl = $('letter'), artEl = $('art'), slotsEl = $('slots');
+const sayBtn = $('say'), spellBtn = $('spell'), quoteEl = $('quote'), hintEl = $('hint');
+const hasSpeech = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+
+let idx = 0, token = 0, heard = false;
+const done = new Set();
+
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function pickVoice(){
+  if (!hasSpeech) return null;
+  const vs = speechSynthesis.getVoices();
+  return vs.find(v => /en[-_]GB/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
+}
+
+function speak(text, rate){
+  return new Promise(resolve => {
+    if (!hasSpeech) { resolve(); return; }
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-GB';
+    const v = pickVoice(); if (v) u.voice = v;
+    u.rate = rate || 0.85;
+    let finished = false, timer;
+    const fin = () => { if (!finished) { finished = true; clearTimeout(timer); resolve(); } };
+    u.onend = fin; u.onerror = fin;
+    timer = setTimeout(fin, 5000);
+    try { speechSynthesis.speak(u); } catch (e) { fin(); }
+  });
+}
+
+function stopSpeech(){ if (hasSpeech) { try { speechSynthesis.cancel(); } catch (e) {} } }
+
+function buildStrip(){
+  abc.innerHTML = WORDS.map((w, i) => `<button type="button" data-i="${i}" aria-label="字母 ${w.l}">${w.l}</button>`).join('');
+  abc.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (b) go(+b.dataset.i);
+  });
+}
+
+function setHint(t){ hintEl.textContent = t; }
+
+function render(){
+  const w = WORDS[idx];
+  token++; stopSpeech(); heard = false;
+  letterEl.textContent = w.l;
+  artEl.innerHTML = `<svg viewBox="0 0 200 200" role="img" aria-label="${w.w} 的插圖">${w.art}</svg>`;
+  slotsEl.innerHTML = [...w.w].map(() => '<span class="slot"></span>').join('');
+  quoteEl.className = 'quote empty';
+  quoteEl.textContent = '按下「念出單字」,這個字的金句會出現在這裡。';
+  spellBtn.disabled = true;
+  sayBtn.disabled = false;
+  setHint(hasSpeech ? '先按「念出單字」,聽完後就能拼字。' : '這個瀏覽器沒有語音功能,仍可閱讀金句與拼字。');
+  [...abc.children].forEach((b, i) => {
+    b.setAttribute('aria-current', i === idx ? 'true' : 'false');
+    b.classList.toggle('done', done.has(i));
+  });
+}
+
+function showQuote(){
+  const w = WORDS[idx];
+  const re = new RegExp('\\b' + w.w + '\\b', 'gi');
+  const en = w.q.split('\n').map(line => esc(line).replace(re, m => `<mark>${m}</mark>`)).join('<br>');
+  quoteEl.className = 'quote show';
+  quoteEl.innerHTML = `<div class="en">${en}</div><div class="zh">${esc(w.zh)}</div><div class="src">${esc(w.src)}</div>`;
+}
+
+async function onSay(){
+  const my = ++token; stopSpeech();
+  showQuote();
+  sayBtn.disabled = true;
+  setHint('播放中……');
+  await speak(WORDS[idx].say, 0.8);
+  if (my !== token) return;
+  heard = true;
+  sayBtn.disabled = false;
+  spellBtn.disabled = false;
+  setHint('聽完了?按下「拼出單字」,一個字母一個字母念出來。');
+}
+
+async function onSpell(){
+  if (!heard) return;
+  const my = ++token; stopSpeech();
+  const w = WORDS[idx];
+  const slots = [...slotsEl.children];
+  slots.forEach(s => { s.textContent = ''; s.classList.remove('on'); });
+  sayBtn.disabled = true; spellBtn.disabled = true;
+  setHint('拼字中……');
+  for (let i = 0; i < w.w.length; i++) {
+    slots[i].classList.add('on');
+    await speak(LETTER_NAME[w.w[i].toLowerCase()] || w.w[i], 0.8);
+    if (my !== token) return;
+    slots[i].textContent = w.w[i];
+    slots[i].classList.remove('on');
+    await sleep(120);
+    if (my !== token) return;
+  }
+  await sleep(250);
+  await speak(w.say, 0.8);
+  if (my !== token) return;
+  done.add(idx);
+  abc.children[idx].classList.add('done');
+  sayBtn.disabled = false; spellBtn.disabled = false;
+  setHint(`拼完了:${w.w}。可以再按一次,或換下一個字。`);
+}
+
+function go(i){
+  idx = (i + WORDS.length) % WORDS.length;
+  render();
+  try { const h = '#' + WORDS[idx].l.toLowerCase(); if (location.hash !== h) location.hash = h; } catch (e) {}
+}
+
+function fromHash(){
+  const m = (location.hash || '').replace('#', '').toUpperCase();
+  const i = WORDS.findIndex(w => w.l === m);
+  if (i >= 0 && i !== idx) { idx = i; render(); }
+}
+
+sayBtn.addEventListener('click', onSay);
+spellBtn.addEventListener('click', onSpell);
+$('prev').addEventListener('click', () => go(idx - 1));
+$('next').addEventListener('click', () => go(idx + 1));
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') go(idx - 1);
+  if (e.key === 'ArrowRight') go(idx + 1);
+});
+window.addEventListener('hashchange', fromHash);
+if (hasSpeech) speechSynthesis.onvoiceschanged = () => {};
+
+buildStrip();
+const startLetter = (location.hash || '').replace('#', '').toUpperCase();
+const startIdx = WORDS.findIndex(w => w.l === startLetter);
+idx = startIdx >= 0 ? startIdx : 0;
+render();
+</script>
+
+</body>
+</html>
